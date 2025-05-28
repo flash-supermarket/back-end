@@ -60,6 +60,7 @@ jobs:
         run: |
           ssh -i private_key.pem -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}"@"${{ secrets.SSH_HOST }}" << 'EOF'
           /www/wwwroot/stop_8080.sh
+          sleep 2
           nohup java -jar flash-supermarket-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
           EOF
       
