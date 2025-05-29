@@ -2,6 +2,7 @@ package com.flash_supermarket.flash_supermarket.controller;
 
 import com.flash_supermarket.flash_supermarket.dao.Relationship;
 import com.flash_supermarket.flash_supermarket.dao.User;
+import com.flash_supermarket.flash_supermarket.dto.FullUserInfoDTO;
 import com.flash_supermarket.flash_supermarket.dto.UserDTO;
 import com.flash_supermarket.flash_supermarket.response.CustomResponse;
 import com.flash_supermarket.flash_supermarket.service.UserService;
@@ -115,8 +116,8 @@ public class UserController {
     public CustomResponse info(@PathVariable String userName){
         CustomResponse customResponse = new CustomResponse();
         try {
-            User user = userService.getFullInfo(userName);
-            customResponse.setData(user);
+            FullUserInfoDTO fullUserInfoDTO = userService.getFullInfo(userName);
+            customResponse.setData(fullUserInfoDTO);
             customResponse.setMessage("获取成功");
         } catch (BusinessException e) {
             customResponse.setCode(e.getCode());

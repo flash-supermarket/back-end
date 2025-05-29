@@ -2,8 +2,10 @@ package com.flash_supermarket.flash_supermarket.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.flash_supermarket.flash_supermarket.converter.UserConverter;
 import com.flash_supermarket.flash_supermarket.dao.Relationship;
 import com.flash_supermarket.flash_supermarket.dao.User;
+import com.flash_supermarket.flash_supermarket.dto.FullUserInfoDTO;
 import com.flash_supermarket.flash_supermarket.dto.UserDTO;
 import com.flash_supermarket.flash_supermarket.mapper.RelationshipMapper;
 import com.flash_supermarket.flash_supermarket.mapper.UserMapper;
@@ -12,6 +14,10 @@ import com.flash_supermarket.flash_supermarket.utils.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author : Extrafy
@@ -123,10 +129,44 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public User getFullInfo(String userName) throws BusinessException {
+    public FullUserInfoDTO getFullInfo(String userName) throws BusinessException {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_name", userName);
-        return userMapper.selectOne(queryWrapper);
+        User findUser = userMapper.selectOne(queryWrapper);
+
+        QueryWrapper<Relationship> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_name", userName);
+        List<Relationship> list = relationshipMapper.selectList(wrapper);
+
+
+        List<User> follows = new ArrayList<>();
+        for (Relationship rel : list) {
+            String followName = rel.getFollowName();
+            QueryWrapper<User> userWrapper = new QueryWrapper<>();
+            userWrapper.eq("user_name", followName);
+            User user = userMapper.selectOne(userWrapper);
+
+            if (user != null) {
+                follows.add(user);
+            }
+        }
+
+        QueryWrapper<Relationship> wrapper2 = new QueryWrapper<>();
+        wrapper2.eq("follow_name", userName);
+        List<Relationship> list2 = relationshipMapper.selectList(wrapper2);
+
+        List<User> fans = new ArrayList<>();
+        for (Relationship rel : list2) {
+            String fanName = rel.getUserName();
+            QueryWrapper<User> userWrapper = new QueryWrapper<>();
+            userWrapper.eq("user_name", fanName);
+            User user = userMapper.selectOne(userWrapper);
+
+            if (user != null) {
+                fans.add(user);
+            }
+        }
+        return UserConverter.userConverter(findUser, follows, fans);
     }
 }
 
