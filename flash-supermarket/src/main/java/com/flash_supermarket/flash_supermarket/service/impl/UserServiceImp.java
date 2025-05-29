@@ -54,7 +54,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void login(UserDTO userDTO) throws BusinessException {
+    public User login(UserDTO userDTO) throws BusinessException {
         String name = userDTO.getUserName();
         String passWord = userDTO.getPassWord();
         if (name == null){
@@ -69,6 +69,7 @@ public class UserServiceImp implements UserService {
         if (user == null){
             throw new BusinessException(400, "用户名不存在或密码错误");
         }
+        return user;
     }
 
     @Override

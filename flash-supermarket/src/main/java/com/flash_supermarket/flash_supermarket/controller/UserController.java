@@ -49,8 +49,8 @@ public class UserController {
     public CustomResponse login(@RequestBody UserDTO userDTO){
         CustomResponse customResponse = new CustomResponse();
         try {
-            userService.login(userDTO);
-            customResponse.setData(true);
+            User user = userService.login(userDTO);
+            customResponse.setData(user);
             customResponse.setMessage("登录成功");
         } catch (BusinessException e) {
             customResponse.setCode(e.getCode());
