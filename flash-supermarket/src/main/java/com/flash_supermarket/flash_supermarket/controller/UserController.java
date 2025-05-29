@@ -77,7 +77,7 @@ public class UserController {
 
     // 关注别人
     @PostMapping("/follow")
-    @Operation(summary = "关注其它用户", description = "关注用户，传入关注的用户的 userName ")
+    @Operation(summary = "关注其它用户", description = "关注用户，传入当前用户的 userName 和关注的用户的 userName ")
     public CustomResponse follow(@RequestBody Relationship relationship){
         CustomResponse customResponse = new CustomResponse();
         try {
