@@ -65,6 +65,7 @@ public class UserServiceImp implements UserService {
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_name", name);
+        queryWrapper.eq("pass_word", passWord);
         User user = userMapper.selectOne(queryWrapper);
         if (user == null){
             throw new BusinessException(400, "用户名不存在或密码错误");
