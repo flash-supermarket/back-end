@@ -15,4 +15,5 @@ public interface RepositoryService {
     List<Integer> listLikes(String userName) throws BusinessException;
     List<Integer> listHistory(String userName) throws BusinessException;
     List<String> getUsersByRepoId(Integer id) throws  BusinessException;
+    List<String> getStarUsersByRepoId(Integer id) throws BusinessException;
 }
