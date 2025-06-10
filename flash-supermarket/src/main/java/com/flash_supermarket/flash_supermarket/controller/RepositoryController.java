@@ -181,5 +181,24 @@ public class RepositoryController {
         }
         return customResponse;
     }
+
+    // 获取用户所有点赞
+    @GetMapping("/listLikeById/{repoId}")
+    @Operation(summary = "根据帖子ID查所有点赞用户", description = "传入帖子的 Id, 获取所有点赞用户")
+    @Parameters(value = {
+            @Parameter(name = "repoId", description = "帖子Id", in = ParameterIn.PATH, example = "1")
+    })
+    public CustomResponse listLikeByRepoId(@PathVariable String repoId){
+        CustomResponse customResponse = new CustomResponse();
+        try {
+            List<String> userNames = repositoryService.getUsersByRepoId(Integer.parseInt(repoId));
+            customResponse.setData(userNames);
+            customResponse.setMessage("获取成功");
+        } catch (BusinessException e) {
+            customResponse.setCode(e.getCode());
+            customResponse.setMessage(e.getMessage());
+        }
+        return customResponse;
+    }
 }
 

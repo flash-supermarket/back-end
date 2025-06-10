@@ -166,5 +166,20 @@ public class RepositoryServiceImp implements RepositoryService {
                 .map(History::getRepositoryId)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<String> getUsersByRepoId(Integer id) throws BusinessException {
+        if(id == null){
+            throw new BusinessException(400, "帖子id为空");
+        }
+        List<Likes> likesList = likesMapper.selectList(
+                new LambdaQueryWrapper<Likes>()
+                        .eq(Likes::getRepositoryId, id)
+                        .select(Likes::getUserName)
+        );
+        return likesList.stream()
+                .map(Likes::getUserName)
+                .collect(Collectors.toList());
+    }
 }
 
